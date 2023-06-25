@@ -1,50 +1,18 @@
-import './App.css';
-import { useDispatch,useSelector } from 'react-redux'
-import { getUsers } from './redux/userSlice';
-import { useEffect } from 'react';
-import Table from 'react-bootstrap/Table';
-import Container from 'react-bootstrap/Container';
-import Button from 'react-bootstrap/Button';
-import moment from 'moment';
+import React from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import BeerList from './redux/BeerList';
+import reducer from './redux/reducer';
+
+const store = createStore(reducer, applyMiddleware(thunk));
+
 const App = () => {
-  
-  const dispatch = useDispatch();
-  const {users} = useSelector(state => state.user);
-  
-  
-  useEffect(() => {
-    dispatch(getUsers())
-    
-  },[])
-  
   return (
-    <Container>
-      
-      <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>S.No</th>
-          <th>Name</th>
-          <th>First Brewed</th>
-          <th>Tag Line</th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map((user) => {
-          return <tr>
-            <td>{user.id}</td>
-            <td>{user.name}</td>
-            <td>{user.first_brewed}</td>
-            <td>{user.tagline}</td>
-          </tr>
-        })}
-      </tbody>
-    </Table>
-      <Button as="input" type="submit" value="Previous" />
-      <Button as="input" type="reset" value="Next" />
-      
-    </Container>
-  )
-}
+    <Provider store={store}>
+      <BeerList />
+    </Provider>
+  );
+};
 
 export default App;
